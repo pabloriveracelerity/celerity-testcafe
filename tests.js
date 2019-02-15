@@ -1,11 +1,38 @@
-import { Selector } from 'testcafe';
+import { Selector, RequestMock } from 'testcafe';
+
+/*
+
+These tests target index.html
+
+*/
 
 fixture `Celerity Website Test`
     .page `file:///Users/privera/Documents/code/js/celerity-testcafe/index.html`;
 
+const pageTitle = 'Celerity - The Digital Integrator';
+
+/*
+
+This bit is to intercept ajax requests and mock a response.
+Not really used in these tests. Only done as an example.
+
+If the page had any content loaded through AJAX, this would be the way
+to mock the content.
+
+*/
+const mock = RequestMock()
+    .onRequestTo('https://www.celerity.com/wp-admin/admin-ajax.php')
+      .respond({
+	  pageTitle: pageTitle
+      }, 200, {
+        'access-control-allow-origin': '*'
+    });
+
+
+
 test('Test page title is Celerity - The Digital Integrator', async t => {
     await t
-        .expect(Selector("title").innerText).eql('Celerity - The Digital Integrator')
+        .expect(Selector("title").innerText).eql(pageTitle)
 });
 
 test('Celerity Twitter feed loads latest official account tweet', async t => {
