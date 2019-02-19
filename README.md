@@ -14,3 +14,5 @@ Run:
 `cd mocks`
 
 `docker-compose up`
+
+`testcafe chrome mocks.js`
