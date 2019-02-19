@@ -10,14 +10,12 @@ fixture `Mock Tests`
     .page `http://localhost:5000/`;
 
 
+
+const jsonResponse = {headline: "Mocking worked.", paragraph: "Take a break cause mocking worked ..."};
+
 const mock = RequestMock()
       .onRequestTo('http://localhost:5000/api')
-      .respond(
-	  {
-          headline: "The test worked!",
-	  paragraph: "Go take a break and play some Titanfall 2 ..."
-          },
-	  200,
+      .respond(jsonResponse, 200,
 	  {
 	      'access-control-allow-origin': '*',
 	      'content-type': 'application/json'
@@ -25,13 +23,15 @@ const mock = RequestMock()
       );
 
 
-test('Test page headline shows the mock request data', async t => {
+test
+    .requestHooks(mock)
+    ('Test page headline shows the mock request data', async t => {
     const clickMeButton = Selector('#click-me-button');
     const headline = Selector('#headline');
 
     await t
         .click(clickMeButton)
         //.debug();
-        .expect(headline.innerText).contains('The test worked')
-	//.debug();
+        .expect(headline.innerText).contains(jsonResponse.headline)
+	    .expect(paragrapha.innerText).contains(jsonResponse.paragraph)
 });
